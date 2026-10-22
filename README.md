@@ -9,13 +9,29 @@ settings [php.net recommends](https://www.php.net/archive/2026.php#2026-10-21-5)
 
 ## Run it
 
-One file, nothing to install: it runs on the PHP you already have (5.6+), on Linux, macOS or Windows.
+Straight from the web (Linux / macOS):
 
 ```sh
+curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php
+```
+
+Add `sudo` if PHP's config needs admin rights to edit, or `-- --check` to only look:
+
+```sh
+curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | sudo php
+curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php -- --check
+```
+
+Or download it first (also works on Windows, where you use `curl.exe`):
+
+```sh
+curl -fsSLo php2shell.php https://wasdthedebugger.github.io/php2shell/fix
 php php2shell.php            # guided wizard
 php php2shell.php --check    # look only, change nothing
 php php2shell.php --undo     # restore a backup
 ```
+
+One file, nothing to install: it runs on the PHP you already have (5.6+), on Linux, macOS or Windows.
 
 Run it from your project folder: it also scans the project for settings that would undo the fixes.
 If PHP's config needs admin rights to edit, use `sudo php php2shell.php`, or on Windows an Administrator prompt.
@@ -26,5 +42,8 @@ fix and shows a preview. Nothing is changed until you say yes. Originals are bac
 ## Docs
 
 https://wasdthedebugger.github.io/php2shell/ has a page for each fix and setup. The site is the plain HTML in `docs/`,
-deployed to GitHub Pages on every push. The tool links to it; set `P2S_DOCS_URL` at the top of `php2shell.php` to `''`
-to use the local `docs/` folder instead.
+served by GitHub Pages. The tool links to it; set `P2S_DOCS_URL` at the top of `php2shell.php` to `''` to use the local
+`docs/` folder instead.
+
+> **Note:** the short link serves `docs/fix`, which is a copy of `php2shell.php`. After changing the script, update the
+> copy too: `cp php2shell.php docs/fix`

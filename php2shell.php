@@ -2,6 +2,9 @@
 /*
  * PHP2Shell Fixer - a guided helper for CVE-2026-109618 and CVE-2026-109619 ("PHP2Shell").
  *
+ * Quick run (no download):
+ *     curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php
+ *
  * Usage (from your PHP project folder, or anywhere):
  *     php php2shell.php            guided wizard
  *     php php2shell.php --check    look only, change nothing
@@ -22,6 +25,10 @@ if (PHP_SAPI !== 'cli') {
 
 define('P2S_VERSION', '1.0.0');
 define('P2S_DROPIN', '99-php2shell.ini');
+// Short link that serves this file (used in the "curl ... | php" instructions).
+define('P2S_SHORT_URL', 'https://wasdthedebugger.github.io/php2shell/fix');
+// True when run as "curl ... | php": the script itself arrived on standard input.
+define('P2S_PIPED', !is_file(__FILE__));
 // Where the docs live online. Set to '' to point at the local docs/ folder instead.
 define('P2S_DOCS_URL', 'https://wasdthedebugger.github.io/php2shell/');
 
@@ -30,6 +37,7 @@ $P2S_FIXED_PRE = array('8.6' => '8.6.0RC4');
 $P2S_ADVISORY = 'https://www.php.net/archive/2026.php#2026-10-21-5';
 
 $P2S_COLOR = p2s_color_supported();
+$P2S_IN = null; // opened on the first question
 $P2S_OPTS = p2s_parse_args($argv);
 
 // ------------------------------------------------------------------ small helpers
@@ -57,6 +65,26 @@ function p2s_parse_args($argv)
         }
     }
     return $o;
+}
+
+/** Where answers come from. When piped, standard input was the script, so read the terminal directly. */
+function p2s_input()
+{
+    if (!P2S_PIPED) return STDIN;
+    $tty = DIRECTORY_SEPARATOR === '\\' ? @fopen('CON', 'r') : @fopen('/dev/tty', 'r');
+    if ($tty) return $tty;
+    fwrite(STDERR, "No terminal to ask questions on. Download the script and run it instead:\n"
+        . "  curl -fsSLo php2shell.php " . P2S_SHORT_URL . "\n  php php2shell.php\n");
+    exit(3);
+}
+
+/** How to run this script again with $args, matching how it was started. */
+function run_cmd($args = '', $sudo = false)
+{
+    $php = $sudo ? 'sudo php' : 'php';
+    $cmd = P2S_PIPED ? 'curl -fsSL ' . P2S_SHORT_URL . " | $php" . ($args !== '' ? " -- $args" : '')
+        : "$php " . basename(__FILE__) . ($args !== '' ? " $args" : '');
+    return $cmd;
 }
 
 function p2s_color_supported()
@@ -105,7 +133,9 @@ function ask($question, $default = '')
 {
     $hint = $default !== '' ? c(" [$default]", 'dim') : '';
     echo c('  ? ', 'blue') . $question . $hint . ' ';
-    $line = fgets(STDIN);
+    global $P2S_IN;
+    if ($P2S_IN === null) $P2S_IN = p2s_input();
+    $line = fgets($P2S_IN);
     if ($line === false) {
         say();
         say(c('Input ended. Nothing more was changed.', 'yellow'));
@@ -149,7 +179,7 @@ function pause_enter()
 function doc($page)
 {
     if (P2S_DOCS_URL !== '') return rtrim(P2S_DOCS_URL, '/') . '/' . $page;
-    return __DIR__ . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $page);
+    return __DIR__ . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $page);
 }
 
 function size_to_bytes($v)
@@ -797,7 +827,7 @@ function wizard($check_only)
     $target = $use_dropin ? rtrim($scan, '/\\') . DIRECTORY_SEPARATOR . P2S_DROPIN : $ini;
     $before = read_file($target);
     $after = $before === null
-        ? "; Added by php2shell.php - temporary PHP2Shell mitigations.\n; Updating PHP is the real fix. Undo with: php php2shell.php --undo\n"
+        ? "; Added by php2shell.php - temporary PHP2Shell mitigations.\n; Updating PHP is the real fix. Undo with: " . run_cmd('--undo') . "\n"
         : $before;
     foreach ($plan as $id => $value) $after = ini_set_in_text($after, $fixes[$id]['key'], $value);
 
@@ -829,7 +859,7 @@ function wizard($check_only)
     if (!$dir_ok) {
         bad("No permission to write $target.");
         if (DIRECTORY_SEPARATOR === '\\') info('Run your command prompt as Administrator and try again.');
-        else info('Run it again with sudo:   sudo php ' . $_SERVER['argv'][0]);
+        else info('Run it again with sudo:   ' . run_cmd('', true));
         info('Or add these lines to the file by hand:');
         foreach ($plan as $id => $value) say('      ' . $fixes[$id]['key'] . ' = ' . $value);
         return 3;
@@ -884,7 +914,7 @@ function wizard($check_only)
     say('   1. Update PHP .................... ' . doc('fixes/update-php.html'));
     say('   2. Limit memory outside PHP ...... ' . doc('fixes/memory-boundary.html'));
     say('   3. Limit request sizes ........... ' . doc('fixes/request-limits.html'));
-    say('   4. After updating PHP, undo this:  php ' . basename(__FILE__) . ' --undo');
+    say('   4. After updating PHP, undo this:  ' . run_cmd('--undo'));
     say();
     say(c('  Source: ' . $P2S_ADVISORY, 'dim'));
     return 0;
@@ -913,9 +943,13 @@ function help()
 {
     say('PHP2Shell Fixer ' . P2S_VERSION . ' - guided help for CVE-2026-109618 / CVE-2026-109619');
     say();
-    say('  php php2shell.php            guided wizard (asks before changing anything)');
-    say('  php php2shell.php --check    check only, change nothing');
-    say('  php php2shell.php --undo     restore a backup');
+    say('  ' . run_cmd() . '            guided wizard (asks before changing anything)');
+    say('  ' . run_cmd('--check') . '    check only, change nothing');
+    say('  ' . run_cmd('--undo') . '     restore a backup');
+    if (P2S_PIPED) {
+        say();
+        say('Or download it once:  curl -fsSLo php2shell.php ' . P2S_SHORT_URL);
+    }
     say();
     say('Other options:');
     say('  --ini=PATH          the php.ini your website uses');

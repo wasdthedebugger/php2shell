@@ -10,8 +10,12 @@
 <nav><a href="index.html"><b>PHP2Shell Fixer</b></a><a href="start.html">Run the tool</a><a href="index.html#fixes">Fixes</a><a href="setups.html">Your setup</a></nav>
 <main>
 <h1>Run the tool</h1>
-<h2>1. Get it</h2>
-<p>Download <code>php2shell.php</code> into your project folder, or anywhere on the server.</p>
+<h2>Quickest: run it straight from the web</h2>
+<pre>curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php</pre>
+<p>Use <code>| sudo php</code> if PHP's config needs admin rights, and <code>| php -- --check</code> to only look. Works on Linux and macOS.</p>
+<h2>1. Or download it</h2>
+<pre>curl -fsSLo php2shell.php https://wasdthedebugger.github.io/php2shell/fix</pre>
+<p>Windows (PowerShell): <code>curl.exe -fsSLo php2shell.php https://wasdthedebugger.github.io/php2shell/fix</code>. Downloading first lets you read the script before running it. It's a single plain PHP file.</p>
 <h2>2. Run it</h2>
 <table>
 <tr><th>System</th><th>Command</th></tr>

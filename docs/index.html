@@ -18,8 +18,9 @@
 <tr><td>8.1 and older</td><td>no official fix: upgrade</td></tr></table>
 <p>Ubuntu, Debian and Red Hat may patch older-looking versions. Check with your vendor.</p>
 <h2>Use the tool</h2>
-<p>One PHP file, nothing to install. Run it from your project folder:</p>
-<pre>php php2shell.php</pre>
+<p>One PHP file, nothing to install. Run it from your project folder (Linux / macOS):</p>
+<pre>curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php</pre>
+<p>Need admin rights to edit PHP's config? Use <code>| sudo php</code>. Prefer to read it first, or on Windows? <a href="start.html">Download it instead</a>.</p>
 <p>It asks simple questions, shows what it will change, backs up first, and can undo. <a href="start.html">How to run it</a>.</p>
 <h2 id="fixes">The fixes</h2>
 <ol><li><a href="fixes/update-php.html">Update PHP (the real fix)</a> <small></small></li><li><a href="fixes/memory-limit.html">Turn off the memory limit</a> <small>CVE-2026-109618</small></li><li><a href="fixes/post-max-size.html">Lower the max request size</a> <small>CVE-2026-109618</small></li><li><a href="fixes/upload-max-filesize.html">Keep the upload limit below the request limit</a> <small>CVE-2026-109618</small></li><li><a href="fixes/upload-progress.html">Turn off session upload progress</a> <small>CVE-2026-109619</small></li><li><a href="fixes/fatal-backtraces.html">Turn off fatal error backtraces (PHP 8.5)</a> <small>CVE-2026-109619</small></li><li><a href="fixes/request-limits.html">Limit request sizes in the web server</a> <small>CVE-2026-109618</small></li><li><a href="fixes/memory-boundary.html">Limit memory outside PHP</a> <small>CVE-2026-109618</small></li><li><a href="fixes/per-request-settings.html">Settings in your project that undo the fixes</a> <small></small></li></ol>
