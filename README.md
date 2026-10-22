@@ -25,6 +25,6 @@ fix and shows a preview. Nothing is changed until you say yes. Originals are bac
 
 ## Docs
 
-https://wasdthedebugger.github.io/php2shell/ has a page for each fix and setup. The site is the plain HTML in `web/`,
+https://wasdthedebugger.github.io/php2shell/ has a page for each fix and setup. The site is the plain HTML in `docs/`,
 deployed to GitHub Pages on every push. The tool links to it; set `P2S_DOCS_URL` at the top of `php2shell.php` to `''`
-to use the local `web/` folder instead.
+to use the local `docs/` folder instead.

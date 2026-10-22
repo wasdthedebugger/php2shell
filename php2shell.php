@@ -9,7 +9,7 @@
  *     php php2shell.php --help
  *
  * Needs nothing but PHP itself (5.6 or newer). Works on Linux, macOS and Windows.
- * Docs: see the web/ folder next to this file.
+ * Docs: see the docs/ folder next to this file.
  *
  * Updating PHP is the only complete fix. The settings this tool changes only reduce the risk.
  */
@@ -22,7 +22,7 @@ if (PHP_SAPI !== 'cli') {
 
 define('P2S_VERSION', '1.0.0');
 define('P2S_DROPIN', '99-php2shell.ini');
-// Where the docs live online. Set to '' to point at the local web/ folder instead.
+// Where the docs live online. Set to '' to point at the local docs/ folder instead.
 define('P2S_DOCS_URL', 'https://wasdthedebugger.github.io/php2shell/');
 
 $P2S_FIXED = array('8.5' => '8.5.12', '8.4' => '8.4.27', '8.3' => '8.3.36', '8.2' => '8.2.35');
