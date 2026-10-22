@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Update PHP (the real fix) - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Update PHP (the real fix)</h1>
+<p class="tags"><span>CVE-2026-109618</span><span>CVE-2026-109619</span></p>
+<p class="box ok">This is the only thing that actually fixes CVE-2026-109618 and CVE-2026-109619.</p>
+<h2>Fixed versions</h2>
+<table><tr><th>You have</th><th>Update to</th></tr>
+<tr><td>PHP 8.5</td><td><b>8.5.12</b> or newer</td></tr>
+<tr><td>PHP 8.4</td><td><b>8.4.27</b> or newer</td></tr>
+<tr><td>PHP 8.3</td><td><b>8.3.36</b> or newer</td></tr>
+<tr><td>PHP 8.2</td><td><b>8.2.35</b> or newer (8.2 stops getting fixes on 31 Dec 2026)</td></tr>
+<tr><td>PHP 8.1 or older</td><td>No official fix. Upgrade to 8.2+, or get a patched package from your OS vendor.</td></tr>
+</table>
+<h2>How</h2>
+<ul>
+<li><b>Ubuntu / Debian:</b> <code>sudo apt update &amp;&amp; sudo apt upgrade</code>. Your version number may not change: the vendor patches it in place. Check <a href="https://ubuntu.com/security/CVE-2026-109618">Ubuntu</a> or <a href="https://security-tracker.debian.org/tracker/CVE-2026-109618">Debian</a>.</li>
+<li><b>Red Hat / Rocky / Alma / Fedora:</b> <code>sudo dnf upgrade</code>. Check <a href="https://access.redhat.com/security/cve/CVE-2026-109618">Red Hat</a>.</li>
+<li><b>macOS (Homebrew):</b> <code>brew upgrade php</code></li>
+<li><b>Windows:</b> download the new version from <a href="https://www.php.net/downloads.php?os=windows">php.net</a>, or update XAMPP/Laragon.</li>
+<li><b>Docker:</b> bump the tag in your Dockerfile (e.g. <code>php:8.3.36-fpm</code>) and rebuild.</li>
+<li><b>Shared hosting:</b> pick the newest PHP in your panel and ask your provider to confirm.</li>
+</ul>
+<p>Then restart PHP. After that, undo the temporary settings: <code>php php2shell.php --undo</code>. In particular, you want <code>memory_limit</code> back to a normal value.</p>
+<p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

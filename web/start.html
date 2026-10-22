@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run the tool - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><a href="index.html"><b>PHP2Shell Fixer</b></a><a href="start.html">Run the tool</a><a href="index.html#fixes">Fixes</a><a href="setups.html">Your setup</a></nav>
+<main>
+<h1>Run the tool</h1>
+<h2>1. Get it</h2>
+<p>Download <code>php2shell.php</code> into your project folder, or anywhere on the server.</p>
+<h2>2. Run it</h2>
+<table>
+<tr><th>System</th><th>Command</th></tr>
+<tr><td>Linux / macOS</td><td><code>php php2shell.php</code><br><small>Use <code>sudo php php2shell.php</code> if PHP's config needs admin rights to edit.</small></td></tr>
+<tr><td>Windows</td><td><code>php php2shell.php</code> in a Command Prompt opened <b>as Administrator</b><br><small>XAMPP: <code>C:\xampp\php\php.exe php2shell.php</code></small></td></tr>
+</table>
+<p>No PHP command? Use the full path to the PHP your site uses, e.g. <code>/usr/bin/php8.3</code>.</p>
+<h2>3. Answer the questions</h2>
+<ol>
+<li>How your site runs PHP (PHP-FPM, Apache, IIS, Docker, shared hosting...)</li>
+<li>Which config file your site uses. The tool lists the ones it finds.</li>
+<li>Your website's PHP version. It tells you if you're patched.</li>
+<li>Whether you need file uploads, and how big</li>
+<li>Each fix, one by one: apply it or not</li>
+<li>A preview of the exact lines, then a final yes/no</li>
+</ol>
+<p>It never restarts anything. It tells you the restart command.</p>
+<h2>Other modes</h2>
+<pre>php php2shell.php --check    look only, change nothing
+php php2shell.php --undo     restore a backup
+php php2shell.php --help</pre>
+<h2>Backups</h2>
+<p>Before any change, the original file is copied to <code>~/.php2shell/backups/&lt;date&gt;/</code> (<code>%USERPROFILE%\.php2shell\backups</code> on Windows). Backups are kept outside your project, so they're never public on your website. <code>--undo</code> puts them back. If the file was edited again since, it warns you first.</p>
+<h2>Where it writes</h2>
+<p>If your PHP has a <code>conf.d</code> folder, the tool adds one small file, <code>99-php2shell.ini</code>, and doesn't touch <code>php.ini</code>. Otherwise it edits <code>php.ini</code>: old lines are commented out, not deleted.</p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

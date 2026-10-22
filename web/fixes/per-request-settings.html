@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings in your project that undo the fixes - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Settings in your project that undo the fixes</h1>
+<p class="tags"><span>CVE-2026-109618</span><span>CVE-2026-109619</span></p><p class="box">This is a <b>temporary</b> setting. It reduces the risk but does not fix the bug. <a href="update-php.html">Update PHP</a> to fix it for real.</p>
+<p>When you run the tool from your project folder, it looks for these and lists them.</p>
+<h2>What it looks for</h2>
+<ul>
+<li><code>php_value</code> / <code>php_flag</code> lines in <code>.htaccess</code></li>
+<li><code>.user.ini</code> files that set the same settings</li>
+<li><code>ini_set('memory_limit', ...)</code> and similar in your PHP code</li>
+</ul>
+<h2>What to do</h2>
+<ul>
+<li><b>ini_set('memory_limit', ...)</b> puts a limit back, which brings back the risk from <a href="memory-limit.html">CVE-2026-109618</a>. Remove it, or set memory_limit with <code>php_admin_value</code> (that can't be overridden).</li>
+<li><b>Old or invalid settings</b> in <code>.htaccess</code>, <code>.user.ini</code>, Apache <code>php_value</code>, or <code>fastcgi_param PHP_VALUE</code> in Nginx can print warnings before PHP is ready, which is one path to CVE-2026-109619. Remove the ones you don't need. Hiding warnings with <code>display_errors</code> or <code>@</code> does <b>not</b> help.</li>
+<li><b>Fatal errors and timeouts</b> that a visitor can trigger (in uploads, imports, callbacks) are another path. Fix them.</li>
+</ul>
+<p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

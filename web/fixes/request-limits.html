@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limit request sizes in the web server - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Limit request sizes in the web server</h1>
+<p class="tags"><span>CVE-2026-109618</span></p><p class="box">This is a <b>temporary</b> setting. It reduces the risk but does not fix the bug. <a href="update-php.html">Update PHP</a> to fix it for real.</p>
+<p>The tool can't do this one for you. It belongs in your web server.</p>
+<h2>What</h2><p>Limit request body size, number of form fields, upload parts, headers, and nesting depth. If your site never takes file uploads, block <code>multipart</code> requests completely. php.net gives no exact numbers, so pick limits that fit your site.</p>
+<h2>Examples</h2>
+<ul>
+<li><b>Nginx:</b> <code>client_max_body_size 8m;</code> and <code>large_client_header_buffers 4 8k;</code></li>
+<li><b>Apache:</b> <code>LimitRequestBody 8388608</code>, <code>LimitRequestFields 50</code></li>
+<li><b>IIS:</b> Request Filtering &rarr; maxAllowedContentLength</li>
+<li><b>Cloudflare / proxy / WAF:</b> use its request size and header limits</li>
+</ul>
+<p>Make sure the limit also applies to requests without a <code>Content-Length</code> header (chunked uploads).</p>
+<p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

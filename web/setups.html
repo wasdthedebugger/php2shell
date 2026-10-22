@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your setup - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><a href="index.html"><b>PHP2Shell Fixer</b></a><a href="start.html">Run the tool</a><a href="index.html#fixes">Fixes</a><a href="setups.html">Your setup</a></nav>
+<main>
+<h1>Your setup</h1>
+<p>Where the config lives and how to restart PHP afterwards.</p>
+<h2 id="fpm">PHP-FPM (Nginx, or Apache with FPM)</h2>
+<p>Config: <code>/etc/php/8.x/fpm/php.ini</code> and <code>conf.d/</code> (Ubuntu/Debian), or <code>/etc/php.ini</code> and <code>/etc/php.d/</code> (Red Hat). Pool files: <code>/etc/php/8.x/fpm/pool.d/</code> or <code>/etc/php-fpm.d/</code>.</p>
+<p>Restart: <code>sudo systemctl restart php8.3-fpm</code> (Red Hat: <code>php-fpm</code>)</p>
+<h2 id="apache">Apache with mod_php</h2>
+<p>Config: <code>/etc/php/8.x/apache2/php.ini</code>. For <code>memory_limit</code>, also add <code>php_admin_value memory_limit -1</code> to the Apache config so apps can't change it.</p>
+<p>Restart: <code>sudo systemctl restart apache2</code> (Red Hat: <code>httpd</code>)</p>
+<h2 id="iis">Windows IIS</h2>
+<p>Config: <code>php.ini</code> in your PHP folder (e.g. <code>C:\Program Files\PHP\8.3\</code>).</p>
+<p>Restart: <code>iisreset</code> as Administrator</p>
+<h2 id="local">XAMPP, MAMP, Laragon, Homebrew</h2>
+<p>XAMPP: <code>C:\xampp\php\php.ini</code>. MAMP: <code>/Applications/MAMP/bin/php/&lt;ver&gt;/conf/php.ini</code>. Homebrew: <code>/opt/homebrew/etc/php/8.x/php.ini</code>.</p>
+<p>Restart from the app's control panel, or <code>brew services restart php</code>.</p>
+<h2 id="docker">Docker</h2>
+<p>Don't edit a running container: changes vanish when it's recreated. Put the settings in your image:</p>
+<pre>RUN { echo "memory_limit = -1"; echo "post_max_size = 8M"; \
+      echo "upload_max_filesize = 2M"; echo "session.upload_progress.enabled = 0"; } \
+    &gt; /usr/local/etc/php/conf.d/99-php2shell.ini</pre>
+<p>Better: bump the image tag to a fixed PHP version and rebuild.</p>
+<h2 id="shared">Shared hosting</h2>
+<p>Your provider controls PHP. <code>.htaccess</code> and <code>.user.ini</code> settings may be ignored, and php.net says not to rely on <code>.user.ini</code> for these bugs because it loads too late. Do this instead:</p>
+<ol><li>Pick the newest PHP version in your hosting panel.</li>
+<li>Ask your provider: <i>"Is the PHP serving my site patched for CVE-2026-109618 and CVE-2026-109619 (PHP2Shell)?"</i></li></ol>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

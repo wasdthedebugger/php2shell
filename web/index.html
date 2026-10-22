@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHP2Shell: what to do - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><a href="index.html"><b>PHP2Shell Fixer</b></a><a href="start.html">Run the tool</a><a href="index.html#fixes">Fixes</a><a href="setups.html">Your setup</a></nav>
+<main>
+<h1>PHP2Shell: what to do</h1>
+<p>PHP2Shell is two critical PHP bugs, <a href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">CVE-2026-109618</a> and <a href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">CVE-2026-109619</a>. They can let anyone on the internet run code on your web server. They affect sites running PHP through PHP-FPM, Apache mod_php, php-cgi, FrankenPHP or LiteSpeed. Fixed PHP versions came out on 21 October 2026.</p>
+<p class="box"><b>Step 1: <a href="fixes/update-php.html">update PHP</a>.</b> That's the real fix. Everything else on this site only lowers the risk until you can.</p>
+<h2>Am I affected?</h2>
+<table><tr><th>Your PHP</th><th>Safe from</th></tr>
+<tr><td>8.5</td><td>8.5.12</td></tr><tr><td>8.4</td><td>8.4.27</td></tr><tr><td>8.3</td><td>8.3.36</td></tr><tr><td>8.2</td><td>8.2.35</td></tr>
+<tr><td>8.1 and older</td><td>no official fix: upgrade</td></tr></table>
+<p>Ubuntu, Debian and Red Hat may patch older-looking versions. Check with your vendor.</p>
+<h2>Use the tool</h2>
+<p>One PHP file, nothing to install. Run it from your project folder:</p>
+<pre>php php2shell.php</pre>
+<p>It asks simple questions, shows what it will change, backs up first, and can undo. <a href="start.html">How to run it</a>.</p>
+<h2 id="fixes">The fixes</h2>
+<ol><li><a href="fixes/update-php.html">Update PHP (the real fix)</a> <small></small></li><li><a href="fixes/memory-limit.html">Turn off the memory limit</a> <small>CVE-2026-109618</small></li><li><a href="fixes/post-max-size.html">Lower the max request size</a> <small>CVE-2026-109618</small></li><li><a href="fixes/upload-max-filesize.html">Keep the upload limit below the request limit</a> <small>CVE-2026-109618</small></li><li><a href="fixes/upload-progress.html">Turn off session upload progress</a> <small>CVE-2026-109619</small></li><li><a href="fixes/fatal-backtraces.html">Turn off fatal error backtraces (PHP 8.5)</a> <small>CVE-2026-109619</small></li><li><a href="fixes/request-limits.html">Limit request sizes in the web server</a> <small>CVE-2026-109618</small></li><li><a href="fixes/memory-boundary.html">Limit memory outside PHP</a> <small>CVE-2026-109618</small></li><li><a href="fixes/per-request-settings.html">Settings in your project that undo the fixes</a> <small></small></li></ol>
+<p>Not sure where your config lives or how to restart PHP? See <a href="setups.html">your setup</a>.</p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

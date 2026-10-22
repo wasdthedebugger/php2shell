@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Limit memory outside PHP - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Limit memory outside PHP</h1>
+<p class="tags"><span>CVE-2026-109618</span></p><p class="box">This is a <b>temporary</b> setting. It reduces the risk but does not fix the bug. <a href="update-php.html">Update PHP</a> to fix it for real.</p>
+<p>Needed when you use <a href="memory-limit.html">memory_limit = -1</a>, so one request can't take down the server.</p>
+<h2>How</h2>
+<ul>
+<li><b>systemd (PHP-FPM):</b> <code>sudo systemctl edit php8.3-fpm</code>, then add <code>[Service]</code> and <code>MemoryMax=2G</code></li>
+<li><b>Docker:</b> <code>docker run --memory=2g ...</code>, or <code>mem_limit</code> in compose</li>
+<li><b>Kubernetes:</b> <code>resources.limits.memory</code></li>
+</ul>
+<p>Best is a setup that kills only the worker that used too much memory, not the whole service.</p>
+<p class="box"><b>Don't</b> use <code>ulimit -v</code> / RLIMIT_AS / RLIMIT_DATA. They can cause the exact failure that triggers the bug.</p>
+<p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

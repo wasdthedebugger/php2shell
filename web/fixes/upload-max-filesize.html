@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keep the upload limit below the request limit - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Keep the upload limit below the request limit</h1>
+<p class="tags"><span>CVE-2026-109618</span></p><p class="box">This is a <b>temporary</b> setting. It reduces the risk but does not fix the bug. <a href="update-php.html">Update PHP</a> to fix it for real.</p>
+<h2>What</h2><p><code>upload_max_filesize</code> set below <code>post_max_size</code>. The tool uses <code>2M</code> if you don't need uploads, or the size you tell it (under 32M) if you do.</p>
+<h2>Why</h2><p>php.net: "Keep upload_max_filesize below post_max_size."</p>
+<h2>Watch out</h2><p>Bigger files can't be uploaded. Need uploads of 32M or more? This mitigation doesn't fit your site, so <a href="update-php.html">update PHP</a> instead.</p>
+
+<h2>Set it by hand</h2>
+<table>
+<tr><th>Your setup</th><th>Where</th><th>Add this</th></tr>
+<tr><td>Any (php.ini)</td><td><code>php.ini</code>, or a new file in its <code>conf.d</code> folder</td><td><code>upload_max_filesize = 2M</code></td></tr>
+<tr><td>PHP-FPM</td><td>pool file, e.g. <code>/etc/php/8.3/fpm/pool.d/www.conf</code></td><td><code>php_admin_value[upload_max_filesize] = 2M</code></td></tr>
+<tr><td>Apache mod_php</td><td>server or VirtualHost config</td><td><code>php_admin_value upload_max_filesize 2M</code></td></tr>
+<tr><td>Docker (official image)</td><td>your Dockerfile</td><td><code>RUN echo "upload_max_filesize = 2M" &gt;&gt; /usr/local/etc/php/conf.d/99-php2shell.ini</code></td></tr>
+<tr><td>Windows / XAMPP / IIS</td><td><code>php.ini</code> in your PHP folder</td><td><code>upload_max_filesize = 2M</code></td></tr>
+<tr><td>Shared hosting</td><td colspan="2">Ask your provider. <code>.user.ini</code> and <code>.htaccess</code> are not reliable for this (<a href="../setups.html#shared">why</a>).</td></tr>
+</table>
+<p>Then <a href="../setups.html">restart PHP</a>. Nothing changes until you do.</p>
+<h2>Undo</h2><p>Run <code>php php2shell.php --undo</code> and pick the change. Or remove the line by hand and restart PHP.</p><p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>

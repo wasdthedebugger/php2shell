@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turn off session upload progress - PHP2Shell Fixer</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<nav><a href="../index.html"><b>PHP2Shell Fixer</b></a><a href="../start.html">Run the tool</a><a href="../index.html#fixes">Fixes</a><a href="../setups.html">Your setup</a></nav>
+<main>
+<h1>Turn off session upload progress</h1>
+<p class="tags"><span>CVE-2026-109619</span></p><p class="box">This is a <b>temporary</b> setting. It reduces the risk but does not fix the bug. <a href="update-php.html">Update PHP</a> to fix it for real.</p>
+<h2>What</h2><p><code>session.upload_progress.enabled = 0</code></p>
+<h2>Why</h2><p>This feature is one confirmed way to reach CVE-2026-109619. It must be set in config that loads before the request is read: php.ini, the PHP-FPM pool or the server config. <b>Not</b> <code>ini_set()</code> and <b>not</b> <code>.user.ini</code>, which load too late.</p>
+<h2>Watch out</h2><p>Upload progress bars that read from <code>$_SESSION</code> stop working. Most sites don't use them.</p>
+
+<h2>Set it by hand</h2>
+<table>
+<tr><th>Your setup</th><th>Where</th><th>Add this</th></tr>
+<tr><td>Any (php.ini)</td><td><code>php.ini</code>, or a new file in its <code>conf.d</code> folder</td><td><code>session.upload_progress.enabled = 0</code></td></tr>
+<tr><td>PHP-FPM</td><td>pool file, e.g. <code>/etc/php/8.3/fpm/pool.d/www.conf</code></td><td><code>php_admin_flag[session.upload_progress.enabled] = off</code></td></tr>
+<tr><td>Apache mod_php</td><td>server or VirtualHost config</td><td><code>php_admin_flag session.upload_progress.enabled off</code></td></tr>
+<tr><td>Docker (official image)</td><td>your Dockerfile</td><td><code>RUN echo "session.upload_progress.enabled = 0" &gt;&gt; /usr/local/etc/php/conf.d/99-php2shell.ini</code></td></tr>
+<tr><td>Windows / XAMPP / IIS</td><td><code>php.ini</code> in your PHP folder</td><td><code>session.upload_progress.enabled = 0</code></td></tr>
+<tr><td>Shared hosting</td><td colspan="2">Ask your provider. <code>.user.ini</code> and <code>.htaccess</code> are not reliable for this (<a href="../setups.html#shared">why</a>).</td></tr>
+</table>
+<p>Then <a href="../setups.html">restart PHP</a>. Nothing changes until you do.</p>
+<h2>Undo</h2><p>Run <code>php php2shell.php --undo</code> and pick the change. Or remove the line by hand and restart PHP.</p><p class="src">Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a></p>
+</main>
+<footer>The settings here reduce risk. <b>Only updating PHP fixes the bugs.</b> Source: <a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net security announcement</a>.</footer>
+</body>
+</html>
