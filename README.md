@@ -11,6 +11,8 @@ settings [php.net recommends](https://www.php.net/archive/2026.php#2026-10-21-5)
 
 Straight from the web (Linux / macOS):
 
+<img width="799" height="454" alt="Screenshot 2026-10-22 at 3 37 02 PM" src="https://github.com/user-attachments/assets/db1be0a8-a99f-4ff6-9e7f-bde1c667d7ef" />
+
 ```sh
 curl -fsSL https://wasdthedebugger.github.io/php2shell/fix | php
 ```
